@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@master
       - name: Set up Python 3.8 (64 bit)
         # Skip setting python on ARM because of missing compatibility: https://github.com/actions/setup-python/issues/108
-        if: ${{ matrix.TARGET != 'win32' && (matrix.os != 'ARM' && matrix.os != 'ARM64' }}
+        if: ${{ matrix.TARGET != 'win32' && matrix.os != 'ARM' && matrix.os != 'ARM64' }}
         uses: actions/setup-python@master
         with:
           python-version: 3.8
