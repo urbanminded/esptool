@@ -58,10 +58,7 @@ jobs:
           pip install --user -e .
       - name: Build with PyInstaller
         run: |
-          pyinstaller --distpath ./${{ env.DISTPATH }} -F --icon=ci/espressif.ico --add-data=".${{ env.STUBS_DIR }}*.json${{ matrix.SEPARATOR }}${{ env.STUBS_DIR }}" esptool.py
-          pyinstaller --distpath ./${{ env.DISTPATH }} -F --icon=ci/espressif.ico --add-data=".${{ env.EFUSE_DIR }}*.yaml${{ matrix.SEPARATOR }}${{ env.EFUSE_DIR }}" espefuse.py
-          pyinstaller --distpath ./${{ env.DISTPATH }} -F --icon=ci/espressif.ico espsecure.py
-          pyinstaller --distpath ./${{ env.DISTPATH }} -F --icon=ci/espressif.ico esp_rfc2217_server.py
+          pyinstaller --distpath ./${{ env.DISTPATH }} --icon=ci/espressif.ico --add-data=".${{ env.STUBS_DIR }}*.json${{ matrix.SEPARATOR }}${{ env.STUBS_DIR }}" esptool.py
       - name: Sign binaries
         if: ${{ matrix.os == 'windows-latest' && (github.event_name != 'pull_request') && (env.CERTIFICATE != '') }}
         env:
@@ -70,16 +67,10 @@ jobs:
         shell: pwsh
         run: |
           ./ci/Sign-File.ps1 -Path ./${{ env.DISTPATH }}/esptool.exe
-          ./ci/Sign-File.ps1 -Path ./${{ env.DISTPATH }}/espefuse.exe
-          ./ci/Sign-File.ps1 -Path ./${{ env.DISTPATH }}/espsecure.exe
-          ./ci/Sign-File.ps1 -Path ./${{ env.DISTPATH }}/esp_rfc2217_server.exe
       - name: Test binaries
         shell: bash
         run: |
           ./${{ env.DISTPATH }}/esptool${{ matrix.EXTEN }} -h
-          ./${{ env.DISTPATH }}/espefuse${{ matrix.EXTEN }} -h
-          ./${{ env.DISTPATH }}/espsecure${{ matrix.EXTEN }} -h
-          ./${{ env.DISTPATH }}/esp_rfc2217_server${{ matrix.EXTEN }} -h
       - name: Add license and readme
         shell: bash
         run: mv LICENSE README.md ./${{ env.DISTPATH }}
