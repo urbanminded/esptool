@@ -58,7 +58,7 @@ jobs:
           pip install --user -e .
       - name: Build with PyInstaller
         run: |
-          pyinstaller --distpath ./${{ env.DISTPATH }} --icon=ci/espressif.ico --add-data=".${{ env.STUBS_DIR }}*.json${{ matrix.SEPARATOR }}${{ env.STUBS_DIR }}" esptool.py
+          pyinstaller --distpath ./${{ env.DISTPATH }} --icon=ci/espressif.ico --add-data=".${{ env.STUBS_DIR }}*.json${{ matrix.SEPARATOR }}${{ env.DISTPATH }}/${{ env.STUBS_DIR }}" esptool.py
       - name: Sign binaries
         if: ${{ matrix.os == 'windows-latest' && (github.event_name != 'pull_request') && (env.CERTIFICATE != '') }}
         env:
